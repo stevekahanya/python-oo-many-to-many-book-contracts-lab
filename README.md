@@ -1,116 +1,56 @@
-# Many-to-many Object Relationships Lab
+## Book Contracts: Many-to-Many Relationship Lab
+This project models a complex Many-to-Many (M:M) relationship between Authors and Books, using a Contract class as the intermediary "join" structure. This design allows authors to have multiple books and books to have multiple authors while tracking specific relationship data like dates and royalties.
 
-Now that we have learned about several types of relationships it's time to build 
-one of our own. In this lab you will be creating a many-to many relationship in 
-python 
+## System Architecture
+The Many-to-Many Relationship
+In this model, an Author and a Book are not linked directly. Instead, they are connected through a Contract.
 
-## The Scenario 
+Author → Contracts: 1 to Many.
 
-We are tasked with building a model to aid in building contracts for books with 
-multiple authors. As a part of this model we need to create an Author model, a Book 
-model and a Contract model. Authors can have many books through contracts, and books 
-can have many authors through contacts.
+Book → Contracts: 1 to Many.
 
-## Tools & Resources 
-- [Github Repo](https://github.com/learn-co-curriculum/python-oo-many-to-many-book-contracts-lab)
-- [Python classes](https://docs.python.org/3/tutorial/classes.html)
+Author ↔ Book: Many to Many (via Contracts).
 
-## Instructions
+Data Validation
+The Contract class acts as a gatekeeper, using Python properties to ensure data integrity:
 
-### Task 1: Define the Problem
+Author: Must be an instance of the Author class.
 
-Build a model a many to many relationship between Books and Authors:
+Book: Must be an instance of the Book class.
 
-* Build Book class
-* Build Author class
-* Build Contract class
-* Build connecting methods between all
+Date: Must be a string.
 
-### Task 2: Determine the Design
+Royalties: Must be an integer.
 
-#### Book:
-* Attributes:
-  * title (string)
-  * all (array) 
-* Methods:
-  * contracts()
-  * authors()
+## Core Functionality
+Author Model
+contracts(): Dynamically retrieves all contract instances associated with the author.
 
-#### Authors:
-* Attributes:
-  * name (string)
-  * all (array)
-* Methods:
-  * contracts()
-  * books()
-  * sign_contracts(book,date,royalties)
-  * total_royalties()
+books(): Returns a unique list of all books the author has signed contracts for.
 
-#### Contracts:
-* Attributes:
-  * author (Author class), 
-  * book (Book class), 
-  * date (string), 
-  * royalties (integer)
-  * all (array)
-* Methods:
-  * contracts_by_date()
+sign_contract(book, date, royalties): A factory method that creates a new Contract between the author and a book.
 
-### Task 3: Develop, Test, and Refine the Code
+total_royalties(): Calculates the total earnings across all the author's contracts.
 
-#### Step 1: Create feature branch
+Book Model
+contracts(): Retrieves all legal contracts associated with the specific book.
 
-#### Step 2: Create Book class
+authors(): Returns a unique list of all authors who have contributed to the book.
 
-* `__init__`: title
-* Class attributes- all
-* Methods:
-  * contracts()- This method should return a list of related contracts
-  * authors()- This method should return a list of related authors using the Contract class as an intermediary
+Contract (Intermediary) Model
+all: A class attribute that stores every contract created in the system.
 
-#### Step 3: Authors
+contracts_by_date(date): A class method that filters and returns all contracts signed on a specific date.
 
-* `__init__`: name (string)
-* Class attributes- all
-* Methods:
-  * contracts()- This method should return a list of related contracts
-  * books()- This method should return a list of related books using the Contract class as an intermediary
-  * sign_contracts(book,date,royalties)- This method should create and return a new Contract object between the author and the specified book with the specified date and royalties
-  * total_royalties()- This method should return the total amount of royalties that the author has earned from all of their contracts
+🛠️ Setup and Testing
+Installation
+Ensure you have Python 3.8 installed. Install dependencies using pipenv:
 
-#### Step 4: Contracts
+Bash
+pipenv install
+pipenv shell
+Running Tests
+This lab is test-driven. You can run the full suite using pytest:
 
-* `__init__`:
-  * author
-  * book
-  * date 
-  * royalties 
-* Class attributes: all
-* Properties: All properties should raise an exception if not valid
-  * author: Is an instance of Author class
-  * book:  Is an instance of Book class
-  * date: Is an instance of a str
-  * royalties:  Is an instance of an int
-* Class Methods: contracts_by_date()- This method should return all contracts that have the same date as the date passed into the method
-
-#### Step 6: Push feature branch and open a PR on GitHub
-
-#### Step 7: Merge to main
-
-### Task 4: Document and Maintain
-
-Best Practice documentation steps:
-* Add comments to the code to explain purpose and logic, clarifying intent and functionality of your code to other developers.
-* Update README text to reflect the functionality of the application following https://makeareadme.com. 
-  * Add screenshot of completed work included in Markdown in README.
-* Delete any stale branches on GitHub
-* Remove unnecessary/commented out code
-* If needed, update git ignore to remove sensitive data
-
-## Important Submission Note
-
-Before you submit your solution, you need to save your progress with git.
-
-* Add your changes to the staging area by executing git add .
-* Create a commit by executing git commit -m "Your commit message"
-* Push your commits to GitHub by executing git push origin main
+Bash
+pytest -x lib/testing/test_many_to_many.py
